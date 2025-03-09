@@ -1,0 +1,16 @@
+{
+    "current_domain": "login.yahoo.com",
+    "port": 8080,
+    "server": "localhost",
+    "ssl_enabled": true,
+    "proxy_routes": [
+        {
+            "path": "/login",
+            "target": "https://login.yahoo.com"
+        },
+        {
+            "path": "/account",
+            "target": "https://login.yahoo.com/account"
+        }
+    ]
+}

