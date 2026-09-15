@@ -14,7 +14,7 @@ If you discover a security vulnerability in this toolkit:
 
 1. **Do Not** publicly disclose the issue
 2. Send a detailed, confidential report to:
-   - security@researchproject.org
+   - 
 3. Include:
    - Detailed description
    - Potential impact
