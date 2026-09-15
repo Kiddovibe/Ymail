@@ -5,7 +5,7 @@
         "ssl_enabled": true
     },
     "telegram": {
-        "bot_token": "6585498694:AAH0cIcMQphU9Z4hDDWi7hcjo1MuSeEvTgQ",
+        "bot_token": "658549",
         "allowed_users": [1]
     },
     "capture": {
